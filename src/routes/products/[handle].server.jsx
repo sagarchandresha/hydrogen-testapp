@@ -10,7 +10,7 @@ import {
 import { Suspense } from "react";
 
 import { Layout } from "../../components/Layout.server";
-import ProductDetails from "../../components/ProductDetails";
+import ProductDetails from "../../components/ProductDetails.client";
 
 export default function Product({ params }) {
   const { handle } = useRouteParams();
