@@ -3,6 +3,8 @@ import { Suspense } from "react";
 
 import FeaturedCollections from "../components/FeaturedCollections.server";
 import { Layout } from "../components/Layout.server";
+import Test from "../components/Test.client";
+import ServerTest  from "./ServerTest.server";
 
 export default function Home() {
   return (
@@ -14,6 +16,8 @@ export default function Home() {
               Go To All Collection
             </Link>
           </h1>
+          <Test />
+          <ServerTest />
         </div>
       </Suspense>
     </Layout>
