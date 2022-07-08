@@ -8,6 +8,7 @@ import {
   Seo,
 } from "@shopify/hydrogen";
 import { Suspense } from "react";
+import ProductCard from "../components/ProductCard.server";
 
 export default function ServerTest() {
   const {
@@ -24,7 +25,13 @@ export default function ServerTest() {
       <MyPage />
       <ShopifyProvider>
         <Suspense>
-          <Products products={products} />
+          <section className="w-full gap-4 md:gap-8 grid p-6 md:p-8 lg:p-12">
+            <div className="grid-flow-row grid gap-2 gap-y-6 md:gap-4 lg:gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              {products.nodes.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </section>
         </Suspense>
       </ShopifyProvider>
     </>
@@ -52,25 +59,33 @@ export function MyPage() {
   return <h1>useShop() = {storeDomain}</h1>;
 }
 
-export function Products({ products }) {
-  return (
-    <>
-      <p className="text-3xl text-red-800">All Products</p>
-      <ul className="list-decimal">
-        {products.nodes.map((product) => {
-          return <li key={product.id}>{product.title}</li>;
-        })}
-      </ul>
-    </>
-  );
-}
 const QUERY = gql`
   query ProductConnection {
-    products(first: 10) {
+    products(first: 8) {
       nodes {
         id
         title
+        publishedAt
         handle
+        variants(first: 1) {
+          nodes {
+            id
+            image {
+              url
+              altText
+              width
+              height
+            }
+            priceV2 {
+              amount
+              currencyCode
+            }
+            compareAtPriceV2 {
+              amount
+              currencyCode
+            }
+          }
+        }
       }
     }
   }

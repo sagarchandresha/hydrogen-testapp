@@ -4,7 +4,6 @@ import {
   useShop,
   useUrl,
   useCart,
-  CartProvider,
 } from "@shopify/hydrogen";
 
 // Client component
@@ -50,19 +49,17 @@ export function CurrentPage() {
 }
 
 export function Cart() {
-  return (
-    <CartProvider>
-      <CartLineItems />
-    </CartProvider>
-  );
+  return <CartLineItems />;
 }
 
 export function CartLineItems() {
-  const cart = useCart();
-  console.log("=", cart);
+  const { totalQuantity, status } = useCart();
+  // console.log("=", cart);
 
   return (
     <>
+      <br />
+      <span>Cart totalQuantity : {totalQuantity}</span>
       {/* {lines.map((line) => {
         return <p></p>;
       })} */}
