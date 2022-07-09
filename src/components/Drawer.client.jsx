@@ -72,6 +72,7 @@ export function useDrawer(openDefault = false) {
 
   function openDrawer() {
     setIsOpen(true);
+    console.log('openDrawer', isOpen);
   }
 
   function closeDrawer() {
