@@ -10,7 +10,7 @@ import {
 } from "@shopify/hydrogen";
 import { Suspense } from "react";
 import HomeProductCard from "../components/HomeProductCard.client";
-import ProductCard from "../components/ProductCard.server";
+import Modal from "../components/Modal.client";
 
 export default function ServerTest() {
   const {
@@ -38,6 +38,7 @@ export default function ServerTest() {
           </section>
         </Suspense>
       </ShopifyProvider>
+      <Modal />
     </>
   );
 }

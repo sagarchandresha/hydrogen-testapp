@@ -6,6 +6,8 @@ import {
   BuyNowButton,
   AddToCartButton,
 } from "@shopify/hydrogen";
+import { CartDetails } from "./CartDetails.client";
+import { Drawer, useDrawer } from "./Drawer.client";
 
 export default function ProductDetails({ product }) {
   return (
@@ -91,14 +93,27 @@ function ProductForm({ product }) {
 function PurchaseMarkup() {
   const { selectedVariant } = useProductOptions();
   const isOutOfStock = !selectedVariant?.availableForSale || false;
+  const { isOpen, openDrawer, closeDrawer } = useDrawer();
 
   return (
     <>
+      <Drawer open={isOpen} onClose={closeDrawer}>
+        <div className="grid">
+          <Drawer.Title>
+            <h2 className="sr-only">Cart Drawer</h2>
+          </Drawer.Title>
+          <CartDetails onClose={closeDrawer} />
+        </div>
+      </Drawer>
       <AddToCartButton
         variantId={selectedVariant.id}
         quantity={1}
         accessibleAddingToCartLabel="Adding item to your cart"
         disabled={isOutOfStock}
+        // onClick={openDrawer}
+        onClick={!isOutOfStock && (() => {
+          setTimeout(() => openDrawer(), 1000)
+        })}
       >
         <span className="bg-black text-white inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none w-full">
           {isOutOfStock ? "Sold out" : "Add to cart"}
