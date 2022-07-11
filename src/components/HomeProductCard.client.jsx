@@ -6,11 +6,12 @@ import {
   ProductOptionsProvider,
   useProductOptions,
 } from "@shopify/hydrogen";
-import { useState } from "react";
-import { useDrawer } from "./Drawer.client";
+import { useRef, useState } from "react";
+import { Drawer, useDrawer } from "./Drawer.client";
+import { CartDetails } from "./CartDetails.client";
 
 export default function HomeProductCard({ product }) {
-  const { openDrawer } = useDrawer();
+  const { isOpen, openDrawer, closeDrawer } = useDrawer();
   const { options, selectedVariant } = useProductOptions();
   const isOutOfStock = !selectedVariant?.availableForSale || false;
   const { priceV2: price, compareAtPriceV2: compareAtPrice } =
@@ -18,9 +19,17 @@ export default function HomeProductCard({ product }) {
 
   const isDiscounted = compareAtPrice?.amount > price?.amount;
   const [isProductHover, setIsProductHover] = useState(false);
-  // console.log("--", product.variants);
+
   return (
     <div className="flex flex-col">
+      <Drawer open={isOpen} onClose={closeDrawer}>
+        <div className="grid">
+          <Drawer.Title>
+            <h2 className="sr-only">Cart Drawer</h2>
+          </Drawer.Title>
+          <CartDetails onClose={closeDrawer} />
+        </div>
+      </Drawer>
       <Link
         to={`/products/${product.handle}`}
         onMouseEnter={() => setIsProductHover(true)}
@@ -83,10 +92,13 @@ export default function HomeProductCard({ product }) {
           variantId={selectedVariant.id}
           quantity={1}
           accessibleAddingToCartLabel="...."
-          className="bg-rose-600 text-white inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none w-full uppercase"
-          onClick={!isOutOfStock && openDrawer}
+          className={`bg-rose-600 text-white inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none w-full uppercase ${isOutOfStock && "opacity-50"}`}
+          onClick={!isOutOfStock && (() => {
+            setTimeout(() => openDrawer(), 1000)
+          })}
+          disabled={isOutOfStock}
         >
-          {isOutOfStock ? "Sold out" : "add to cart"}
+          add to cart
         </AddToCartButton>
       </form>
     </div>
@@ -106,7 +118,7 @@ function ProductGridOptions({ name, values }) {
         const selected = selectedOptions[name] === value;
         const id = `option-${name}-${value}`;
         return (
-          <option value={value} selected={selected} id={id}>
+          <option value={value} defaultValue={selectedOptions[name]} id={id}>
             {value}
           </option>
         );

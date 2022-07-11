@@ -32,6 +32,7 @@ export default function Header({ shop }) {
         <button
           onClick={openDrawer}
           className="relative flex items-center justify-center w-8 h-8"
+          id="cartBag"
         >
           <IconBag />
           <CartBadge dark={isHome} />
