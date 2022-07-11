@@ -79,7 +79,7 @@ const QUERY = gql`
             height
           }
         }
-        variants(first: 1) {
+        variants(first: 100) {
           nodes {
             id
             availableForSale

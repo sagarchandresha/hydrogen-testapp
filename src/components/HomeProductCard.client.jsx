@@ -11,9 +11,7 @@ import { useDrawer } from "./Drawer.client";
 
 export default function HomeProductCard({ product }) {
   const { openDrawer } = useDrawer();
-  const { selectedVariant } = useProductOptions({
-    initialVariantId: product.variants.nodes[0].id,
-  });
+  const { options, selectedVariant } = useProductOptions();
   const isOutOfStock = !selectedVariant?.availableForSale || false;
   const { priceV2: price, compareAtPriceV2: compareAtPrice } =
     product.variants?.nodes[0] || {};
@@ -73,20 +71,41 @@ export default function HomeProductCard({ product }) {
           </div>
         </div>
       </Link>
-      {/* <form> */}
-      <AddToCartButton
-        variantId={selectedVariant.id}
-        quantity={1}
-        accessibleAddingToCartLabel="Adding item to your cart"
-        className="bg-rose-600 text-white inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none w-full uppercase"
-        onClick={
-          !isOutOfStock &&
-          (openDrawer)
-        }
-      >
-        {isOutOfStock ? "Sold out" : "add to cart"}
-      </AddToCartButton>
-      {/* </form> */}
+      <form>
+        {options.map(({ name, values }) => {
+          // console.log(values.length);
+          return values.length == 1 ? null : (
+            <ProductGridOptions name={name} values={values} />
+          );
+        })}
+
+        <AddToCartButton
+          variantId={selectedVariant.id}
+          quantity={1}
+          accessibleAddingToCartLabel="Adding item to your cart"
+          className="bg-rose-600 text-white inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none w-full uppercase"
+          onClick={!isOutOfStock && openDrawer}
+        >
+          {isOutOfStock ? "Sold out" : "add to cart"}
+        </AddToCartButton>
+      </form>
     </div>
+  );
+}
+function ProductGridOptions({ name, values }) {
+  // console.log("====", values);
+  const { selectedOptions, setSelectedOption } = useProductOptions();
+  return (
+    <select name={name} onChange={(e) => setSelectedOption(name, e.target.value)}>
+      {values.map(function (value) {
+        const selected = selectedOptions[name] === value;
+        const id = `option-${name}-${value}`;
+        return (
+          <option value={value} selected={selected} id={id}>
+            {value}
+          </option>
+        );
+      })}
+    </select>
   );
 }
