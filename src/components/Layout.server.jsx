@@ -42,7 +42,7 @@ export function Layout({ children }) {
         </div>
         <Header shop={shop} />
 
-        <main role="main" id="mainContent" className="flex-grow">
+        <main role="main" id="mainContent" className="flex-grow bg-blue-100">
           <Suspense>{children}</Suspense>
         </main>
       </div>
