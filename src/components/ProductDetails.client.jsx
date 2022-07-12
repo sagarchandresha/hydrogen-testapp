@@ -162,7 +162,7 @@ function OptionRadio({ values, name }) {
             />
             <div
               className={`leading-none border-b-[2px] py-1 cursor-pointer transition-all duration-200 ${
-                checked ? "border-gray-500" : "border-neutral-50"
+                checked ? "border-gray-500" : "border-transparent"
               }`}
             >
               {value}
