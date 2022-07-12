@@ -10,7 +10,7 @@ import Slider from "react-slick";
 
 export default function Modal({ product }) {
   const [isOpen, setIsOpen] = useState(false);
-  const { options, selectedVariant } = useProductOptions();
+  const { options, selectedVariant } = useProductOptions(); 
   const isOutOfStock = !selectedVariant?.availableForSale || false;
 
   function closeModal() {
