@@ -5,14 +5,10 @@ import {
   AddToCartButton,
   ProductOptionsProvider,
   useProductOptions,
-  ProductPrice,
 } from "@shopify/hydrogen";
 import { useRef, useState } from "react";
 import { Drawer, useDrawer } from "./Drawer.client";
 import { CartDetails } from "./CartDetails.client";
-import Modal from "./Modal.client";
-import "slick-carousel/slick/slick.css"; 
-import "slick-carousel/slick/slick-theme.css";
 
 export default function HomeProductCard({ product }) {
   const { isOpen, openDrawer, closeDrawer } = useDrawer();
@@ -71,11 +67,14 @@ export default function HomeProductCard({ product }) {
             </h3>
             <div className="flex gap-4">
               <span className="max-w-prose whitespace-pre-wrap inherit text-copy flex gap-4">
-                <ProductPrice
-                  className="text-gray-900 text-lg font-semibold"
-                  variantId={selectedVariant.id}
-                  data={product}
-                />
+                <Money withoutTrailingZeros data={price} />
+                {isDiscounted && (
+                  <Money
+                    className="line-through opacity-50"
+                    withoutTrailingZeros
+                    data={compareAtPrice}
+                  />
+                )}
               </span>
             </div>
           </div>
@@ -93,32 +92,26 @@ export default function HomeProductCard({ product }) {
           variantId={selectedVariant.id}
           quantity={1}
           accessibleAddingToCartLabel="...."
-          className={`bg-rose-600 text-white inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none w-full uppercase ${
-            isOutOfStock && "opacity-50"
-          }`}
-          onClick={
-            !isOutOfStock &&
-            (() => {
-              setTimeout(() => openDrawer(), 1000);
-            })
-          }
+          className={`bg-rose-600 text-white inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none w-full uppercase ${isOutOfStock && "opacity-50"}`}
+          onClick={!isOutOfStock && (() => {
+            setTimeout(() => openDrawer(), 1000)
+          })}
           disabled={isOutOfStock}
         >
           add to cart
         </AddToCartButton>
       </form>
-      {!isOutOfStock && <Modal product={product}/>}
     </div>
   );
 }
 function ProductGridOptions({ name, values }) {
   // console.log("====", values);
   const { selectedOptions, setSelectedOption } = useProductOptions();
-  return name != "Color" ? (
+  return name == "Size" ? (
     <select
       name={name}
       onChange={(e) => setSelectedOption(name, e.target.value)}
-      style={{ height: "35px" }}
+      style = {{ height: "35px" }}
       className="inline-block mx-3 my-2 bg-transparent"
     >
       {values.map(function (value) {
@@ -150,8 +143,9 @@ function ProductGridOptions({ name, values }) {
             className={`rounded-full leading-none border-b-[2px] py-1 cursor-pointer transition-all duration-200 border-2 ${
               checked ? "border-black" : "border-transparent"
             }`}
-            style={{ backgroundColor: value, width: "35px", height: "35px" }}
-          ></div>
+            style = {{ backgroundColor: value, width: "35px", height: "35px" }}
+          >
+          </div>
         </label>
       );
     })
