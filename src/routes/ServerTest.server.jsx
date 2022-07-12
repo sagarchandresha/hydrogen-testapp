@@ -10,7 +10,6 @@ import {
 } from "@shopify/hydrogen";
 import { Suspense } from "react";
 import HomeProductCard from "../components/HomeProductCard.client";
-import Modal from "../components/Modal.client";
 
 export default function ServerTest() {
   const {
@@ -38,7 +37,6 @@ export default function ServerTest() {
           </section>
         </Suspense>
       </ShopifyProvider>
-      <Modal />
     </>
   );
 }
@@ -65,6 +63,40 @@ export function MyPage() {
 }
 
 const QUERY = gql`
+  fragment MediaFields on Media {
+    mediaContentType
+    alt
+    previewImage {
+      url
+    }
+    ... on MediaImage {
+      id
+      image {
+        url
+        width
+        height
+      }
+    }
+    ... on Video {
+      id
+      sources {
+        mimeType
+        url
+      }
+    }
+    ... on Model3d {
+      id
+      sources {
+        mimeType
+        url
+      }
+    }
+    ... on ExternalVideo {
+      id
+      embedUrl
+      host
+    }
+  }
   query ProductConnection {
     products(first: 8) {
       nodes {
@@ -78,6 +110,11 @@ const QUERY = gql`
             altText
             width
             height
+          }
+        }
+        media(first: 7) {
+          nodes {
+            ...MediaFields
           }
         }
         variants(first: 100) {
