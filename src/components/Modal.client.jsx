@@ -6,11 +6,11 @@ import {
   useProductOptions,
 } from "@shopify/hydrogen";
 import { Fragment, useState } from "react";
-import Slider from "react-slick";
+import AwesomeSlider from "react-awesome-slider";
 
 export default function Modal({ product }) {
   const [isOpen, setIsOpen] = useState(false);
-  const { options, selectedVariant } = useProductOptions(); 
+  const { options, selectedVariant } = useProductOptions();
   const isOutOfStock = !selectedVariant?.availableForSale || false;
 
   function closeModal() {
@@ -143,19 +143,12 @@ function ProductGallery({ media }) {
   if (!media.length) {
     return null;
   }
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-  };
 
   return (
     <div
-      className={``}
+      className={`grid grid-flow-col md:grid-flow-row  md:p-0 md:grid-cols-1 w-screen md:w-full lg:col-span-2`}
     >
-      <Slider {...settings}>
+      <AwesomeSlider>
         {media.map((med, i) => {
           let extraProps = {};
 
@@ -193,7 +186,7 @@ function ProductGallery({ media }) {
             </div>
           );
         })}
-      </Slider>
+      </AwesomeSlider>
     </div>
   );
 }

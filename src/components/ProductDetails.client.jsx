@@ -8,6 +8,8 @@ import {
 } from "@shopify/hydrogen";
 import { CartDetails } from "./CartDetails.client";
 import { Drawer, useDrawer } from "./Drawer.client";
+import AwesomeSlider from "react-awesome-slider";
+import "react-awesome-slider/dist/styles.css";
 
 export default function ProductDetails({ product }) {
   return (
@@ -76,7 +78,7 @@ function ProductForm({ product }) {
           variantId={selectedVariant.id}
           data={product}
         />
-        - 
+        -
         <ProductPrice
           className="text-gray-900 text-lg font-semibold"
           variantId={selectedVariant.id}
@@ -111,9 +113,12 @@ function PurchaseMarkup() {
         accessibleAddingToCartLabel="Adding item to your cart"
         disabled={isOutOfStock}
         // onClick={openDrawer}
-        onClick={!isOutOfStock && (() => {
-          setTimeout(() => openDrawer(), 1000)
-        })}
+        onClick={
+          !isOutOfStock &&
+          (() => {
+            setTimeout(() => openDrawer(), 1000);
+          })
+        }
       >
         <span className="bg-black text-white inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none w-full">
           {isOutOfStock ? "Sold out" : "Add to cart"}
@@ -177,45 +182,47 @@ function ProductGallery({ media }) {
     <div
       className={`grid gap-4 overflow-x-scroll grid-flow-col md:grid-flow-row  md:p-0 md:overflow-x-auto md:grid-cols-2 w-screen md:w-full lg:col-span-2`}
     >
-      {media.map((med, i) => {
-        let extraProps = {};
+      <AwesomeSlider>
+        {media.map((med, i) => {
+          let extraProps = {};
 
-        if (med.mediaContentType === "MODEL_3D") {
-          extraProps = {
-            interactionPromptThreshold: "0",
-            ar: true,
-            loading: "eager",
-            disableZoom: true,
+          if (med.mediaContentType === "MODEL_3D") {
+            extraProps = {
+              interactionPromptThreshold: "0",
+              ar: true,
+              loading: "eager",
+              disableZoom: true,
+            };
+          }
+
+          const data = {
+            ...med,
+            image: {
+              ...med.image,
+              altText: med.alt || "Product image",
+            },
           };
-        }
 
-        const data = {
-          ...med,
-          image: {
-            ...med.image,
-            altText: med.alt || "Product image",
-          },
-        };
-
-        return (
-          <div
-            className={`${
-              i % 3 === 0 ? "md:col-span-2" : "md:col-span-1"
-            } snap-center card-image bg-white aspect-square md:w-full w-[80vw] shadow-sm rounded`}
-            key={med.id || med.image.id}
-          >
-            <MediaFile
-              tabIndex="0"
-              className={`w-full h-full aspect-square object-cover`}
-              data={data}
-              options={{
-                crop: "center",
-              }}
-              {...extraProps}
-            />
-          </div>
-        );
-      })}
+          return (
+            <div
+              className={`${
+                i % 3 === 0 ? "md:col-span-2" : "md:col-span-1"
+              } snap-center card-image bg-white aspect-square md:w-full w-[80vw] shadow-sm rounded`}
+              key={med.id || med.image.id}
+            >
+              <MediaFile
+                tabIndex="0"
+                className={`w-full h-full aspect-square object-cover`}
+                data={data}
+                options={{
+                  crop: "center",
+                }}
+                {...extraProps}
+              />
+            </div>
+          );
+        })}
+      </AwesomeSlider>
     </div>
   );
 }
