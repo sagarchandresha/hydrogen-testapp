@@ -16,7 +16,7 @@ export default function ProductDetails({ product }) {
     <ProductOptionsProvider data={product}>
       <section className="w-full overflow-x-hidden gap-4 md:gap-8 grid px-6 md:px-8 lg:px-12">
         <div className="grid items-start gap-6 lg:gap-20 md:grid-cols-2 lg:grid-cols-3">
-          <div className="grid md:grid-flow-row  md:p-0 md:overflow-x-auto md:grid-cols-2 md:w-full lg:col-span-2">
+          <div className="grid md:grid-flow-row  md:p-0 md:grid-cols-2 md:w-full lg:col-span-2">
             <div className="md:col-span-2 snap-center card-image aspect-square md:w-full w-[80vw] shadow rounded">
               <ProductGallery media={product.media.nodes} />
             </div>
@@ -180,7 +180,7 @@ function ProductGallery({ media }) {
 
   return (
     <div
-      className={`grid gap-4 overflow-x-scroll grid-flow-col md:grid-flow-row  md:p-0 md:overflow-x-auto md:grid-cols-2 w-screen md:w-full lg:col-span-2`}
+      className={`grid gap-4 grid-flow-col md:grid-flow-row  md:p-0 md:grid-cols-1 w-screen md:w-full lg:col-span-1`}
     >
       <AwesomeSlider>
         {media.map((med, i) => {
@@ -212,7 +212,7 @@ function ProductGallery({ media }) {
             >
               <MediaFile
                 tabIndex="0"
-                className={`w-full h-full aspect-square object-cover`}
+                className={`w-full h-full aspect-square`}
                 data={data}
                 options={{
                   crop: "center",
