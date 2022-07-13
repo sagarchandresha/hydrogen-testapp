@@ -8,8 +8,8 @@ import {
 } from "@shopify/hydrogen";
 import { CartDetails } from "./CartDetails.client";
 import { Drawer, useDrawer } from "./Drawer.client";
-import AwesomeSlider from "react-awesome-slider";
-import "react-awesome-slider/dist/styles.css";
+// import AwesomeSlider from "react-awesome-slider";
+// import "react-awesome-slider/dist/styles.css";
 
 export default function ProductDetails({ product }) {
   return (
@@ -182,7 +182,7 @@ function ProductGallery({ media }) {
     <div
       className={`grid gap-4 grid-flow-col md:grid-flow-row  md:p-0 md:grid-cols-1 w-screen md:w-full lg:col-span-1`}
     >
-      <AwesomeSlider>
+      {/* <AwesomeSlider> */}
         {media.map((med, i) => {
           let extraProps = {};
 
@@ -220,7 +220,7 @@ function ProductGallery({ media }) {
             </div>
           );
         })}
-      </AwesomeSlider>
+      {/* </AwesomeSlider> */}
     </div>
   );
 }
