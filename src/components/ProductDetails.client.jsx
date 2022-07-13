@@ -34,22 +34,29 @@ export default function ProductDetails({ product }) {
             </div>
             <ProductForm product={product} />
             <div className="mt-8">
-              <div
-                className="prose border-t border-gray-200 pt-6 text-black text-md"
-                // dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
-              >
-                {parts.map((item) => {
-                  return (
-                    <>
-                      <Accordion
-                        title={item.split("</h2>")[0]}
-                        content={item.split("</h2>")[1]}
-                      />
-                      <br />
-                    </>
-                  );
-                })}
-              </div>
+              {product.descriptionHtml.search('<h2>') !== -1 ? (
+                <div
+                  className="prose border-t border-gray-200 pt-6 text-black text-md"
+                  // dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+                >
+                  {parts.map((item) => {
+                    return (
+                      <>
+                        <Accordion
+                          title={item.split("</h2>")[0]}
+                          content={item.split("</h2>")[1]}
+                        />
+                        <br />
+                      </>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div
+                  className="prose border-t border-gray-200 pt-6 text-black text-md 1"
+                  dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+                ></div>
+              )}
             </div>
           </div>
         </div>
