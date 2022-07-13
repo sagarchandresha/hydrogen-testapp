@@ -6,22 +6,24 @@ import {
   BuyNowButton,
   AddToCartButton,
 } from "@shopify/hydrogen";
+import Accordion from "./Accordion.client";
 import { CartDetails } from "./CartDetails.client";
 import { Drawer, useDrawer } from "./Drawer.client";
 // import AwesomeSlider from "react-awesome-slider";
 // import "react-awesome-slider/dist/styles.css";
 
 export default function ProductDetails({ product }) {
+  const parts = product.descriptionHtml.split("<h2>").filter((item) => item);
   return (
     <ProductOptionsProvider data={product}>
       <section className="w-full overflow-x-hidden gap-4 md:gap-8 grid px-6 md:px-8 lg:px-12">
         <div className="grid items-start gap-6 lg:gap-20 md:grid-cols-2 lg:grid-cols-3">
-          <div className="grid md:grid-flow-row  md:p-0 md:grid-cols-2 md:w-full lg:col-span-2">
-            <div className="md:col-span-2 snap-center card-image aspect-square md:w-full w-[80vw] shadow rounded">
+          <div className="mt-5 grid md:grid-flow-row  md:p-0 md:grid-cols-2 md:w-full lg:col-span-2">
+            <div className="md:col-span-2 snap-center card-image aspect-square md:w-full w-[80vw]">
               <ProductGallery media={product.media.nodes} />
             </div>
           </div>
-          <div className="sticky md:mx-auto max-w-xl md:max-w-[24rem] grid gap-8 p-0 md:p-6 md:px-0 top-[6rem] lg:top-[8rem] xl:top-[10rem]">
+          <div className="sticky w-full md:mx-auto grid gap-8 p-0 md:p-6 md:px-0 top-[6rem] lg:top-[8rem] xl:top-[10rem]">
             <div className="grid gap-2">
               <h1 className="text-4xl font-bold leading-10 whitespace-normal">
                 {product.title}
@@ -34,8 +36,20 @@ export default function ProductDetails({ product }) {
             <div className="mt-8">
               <div
                 className="prose border-t border-gray-200 pt-6 text-black text-md"
-                dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
-              ></div>
+                // dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+              >
+                {parts.map((item) => {
+                  return (
+                    <>
+                      <Accordion
+                        title={item.split("</h2>")[0]}
+                        content={item.split("</h2>")[1]}
+                      />
+                      <br />
+                    </>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
@@ -161,7 +175,7 @@ function OptionRadio({ values, name }) {
             />
             <div
               className={`leading-none border-b-[2px] py-1 cursor-pointer transition-all duration-200 ${
-                checked ? "border-gray-500" : "border-neutral-50"
+                checked ? "border-gray-500" : "border-transparent"
               }`}
             >
               {value}
@@ -179,47 +193,45 @@ function ProductGallery({ media }) {
   }
 
   return (
-    <div
-      className={`grid gap-4 grid-flow-col md:grid-flow-row  md:p-0 md:grid-cols-1 w-screen md:w-full lg:col-span-1`}
-    >
+    <div className={`grid gap-2 grid-cols-2 md:p-0 w-screen md:w-full`}>
       {/* <AwesomeSlider> */}
-        {media.map((med, i) => {
-          let extraProps = {};
+      {media.map((med, i) => {
+        let extraProps = {};
 
-          if (med.mediaContentType === "MODEL_3D") {
-            extraProps = {
-              interactionPromptThreshold: "0",
-              ar: true,
-              loading: "eager",
-              disableZoom: true,
-            };
-          }
-
-          const data = {
-            ...med,
-            image: {
-              ...med.image,
-              altText: med.alt || "Product image",
-            },
+        if (med.mediaContentType === "MODEL_3D") {
+          extraProps = {
+            interactionPromptThreshold: "0",
+            ar: true,
+            loading: "eager",
+            disableZoom: true,
           };
+        }
 
-          return (
-            <div
-              className={`snap-center card-image bg-white md:w-full w-[80vw] shadow-sm rounded`}
-              key={med.id || med.image.id}
-            >
-              <MediaFile
-                tabIndex="0"
-                className={`w-full h-full aspect-square`}
-                data={data}
-                options={{
-                  crop: "center",
-                }}
-                {...extraProps}
-              />
-            </div>
-          );
-        })}
+        const data = {
+          ...med,
+          image: {
+            ...med.image,
+            altText: med.alt || "Product image",
+          },
+        };
+
+        return (
+          <div
+            className={`snap-center card-image bg-white md:w-full w-[80vw] shadow-sm rounded`}
+            key={med.id || med.image.id}
+          >
+            <MediaFile
+              tabIndex="0"
+              className={`w-full h-full aspect-square`}
+              data={data}
+              options={{
+                crop: "center",
+              }}
+              {...extraProps}
+            />
+          </div>
+        );
+      })}
       {/* </AwesomeSlider> */}
     </div>
   );
