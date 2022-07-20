@@ -6,13 +6,30 @@ import {
   BuyNowButton,
   AddToCartButton,
 } from "@shopify/hydrogen";
+import { useEffect, useState } from "react";
 import Accordion from "./Accordion.client";
 import { CartDetails } from "./CartDetails.client";
 import { Drawer, useDrawer } from "./Drawer.client";
+import RecenlyViewed from "./RecentlyViewed.client";
 // import AwesomeSlider from "react-awesome-slider";
 // import "react-awesome-slider/dist/styles.css";
 
 export default function ProductDetails({ product }) {
+  // const [viewed, setViewed] = useState([]);
+  // const recentlyViewed = [];
+  // recentlyViewed.push(product);
+  // console.log(recentlyViewed);
+  // useEffect(() => {
+  //   var viewedProducts = sessionStorage.getItem("viewedProducts");
+  //   if(viewedProducts == null) {
+  //     sessionStorage.setItem("viewedProducts", JSON.stringify(recentlyViewed));
+  //   } else {
+  //     viewedProducts = JSON.parse(viewedProducts);
+  //     viewedProducts = [...recentlyViewed];
+  //     sessionStorage.setItem("viewedProducts", JSON.stringify(recentlyViewed));
+  //   }
+  // }, []);
+
   const parts = product.descriptionHtml.split("<h2>").filter((item) => item);
   return (
     <ProductOptionsProvider data={product}>
@@ -34,7 +51,7 @@ export default function ProductDetails({ product }) {
             </div>
             <ProductForm product={product} />
             <div className="mt-8">
-              {product.descriptionHtml.search('<h2>') !== -1 ? (
+              {product.descriptionHtml.search("<h2>") !== -1 ? (
                 <div
                   className="prose border-t border-gray-200 pt-6 text-black text-md"
                   // dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
@@ -60,6 +77,9 @@ export default function ProductDetails({ product }) {
             </div>
           </div>
         </div>
+      </section>
+      <section>
+        {/* <RecenlyViewed viewed={viewed} /> */}
       </section>
     </ProductOptionsProvider>
   );
@@ -163,7 +183,7 @@ function PurchaseMarkup() {
 function OptionRadio({ values, name }) {
   const { selectedOptions, setSelectedOption } = useProductOptions();
 
-  return (
+  return name != "Color" ? (
     <>
       {values.map((value) => {
         const checked = selectedOptions[name] === value;
@@ -181,12 +201,43 @@ function OptionRadio({ values, name }) {
               onChange={() => setSelectedOption(name, value)}
             />
             <div
-              className={`leading-none border-b-[2px] py-1 cursor-pointer transition-all duration-200 ${
-                checked ? "border-gray-500" : "border-transparent"
+              className={`relative leading-none border-b-[2px] cursor-pointer transition-all duration-200 rounded-full border ${
+                checked
+                  ? "bg-black text-white border-transparent"
+                  : "text-black bg-transparent border-black"
               }`}
+              style={{ width: "35px", height: "35px" }}
             >
-              {value}
+              <span className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
+                {value[0]}
+              </span>
             </div>
+          </label>
+        );
+      })}
+    </>
+  ) : (
+    <>
+      {values.map((value) => {
+        const checked = selectedOptions[name] === value;
+        const id = `option-${name}-${value}`;
+        return (
+          <label key={id} htmlFor={id} className="inline-block">
+            <input
+              className="sr-only w-auto"
+              type="radio"
+              id={id}
+              name={`option[${name}]`}
+              value={value}
+              checked={checked}
+              onChange={() => setSelectedOption(name, value)}
+            />
+            <div
+              className={`rounded-full leading-none border-b-[2px] py-1 cursor-pointer transition-all duration-200 border-2 ${
+                checked ? "border-black" : "border-transparent"
+              }`}
+              style={{ backgroundColor: value, width: "35px", height: "35px" }}
+            ></div>
           </label>
         );
       })}

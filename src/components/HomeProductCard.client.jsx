@@ -34,6 +34,7 @@ export default function HomeProductCard({ product }) {
         </div>
       </Drawer>
       <Link
+        key={product.id}
         to={`/products/${product.handle}`}
         onMouseEnter={() => setIsProductHover(true)}
         onMouseLeave={() => setIsProductHover(false)}
