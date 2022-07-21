@@ -5,6 +5,8 @@ import {
   ProductPrice,
   BuyNowButton,
   AddToCartButton,
+  CartLineQuantityAdjustButton,
+  CartLineQuantity,
 } from "@shopify/hydrogen";
 import { useEffect, useState } from "react";
 import Accordion from "./Accordion.client";
@@ -21,7 +23,7 @@ export default function ProductDetails({ product }) {
   console.log(product);
   useEffect(() => {
     var viewedProducts = sessionStorage.getItem("viewedProducts");
-    if(viewedProducts == null) {
+    if (viewedProducts == null) {
       sessionStorage.setItem("viewedProducts", JSON.stringify(recentlyViewed));
       setViewed(recentlyViewed);
     } else {
@@ -89,7 +91,18 @@ export default function ProductDetails({ product }) {
 
 function ProductForm({ product }) {
   const { options, selectedVariant } = useProductOptions();
+  const [quantity, setQuantity] = useState(1);
 
+  const handlePlusQuantity = (e) => {
+    e.preventDefault();
+    let qty = quantity;
+    setQuantity(parseInt(qty) + 1);
+  };
+  const handleMinusQuantity = (e) => {
+    e.preventDefault();
+    let qty = quantity;
+    quantity != 1 && setQuantity(parseInt(qty) - 1);
+  };
   return (
     <form className="grid gap-10">
       {
@@ -125,16 +138,33 @@ function ProductForm({ product }) {
           className="text-gray-900 text-xl font-semibold inline-block ml-2"
           variantId={selectedVariant.id}
           data={product}
+          quantity={2}
         />
       </div>
+      <div className="quantitySelector flex gap-5">
+        <span onClick={handleMinusQuantity} className="cursor-pointer selection:bg-transparent">
+          &#8722;
+        </span>
+        <input
+          type="number"
+          min={1}
+          value={quantity}
+          defaultValue={1}
+          className="col-span-2 bg-transparent text-center focus:border-0 focus:outline-none"
+          style={{ maxWidth: "25px;" }}
+        />
+        <span onClick={handlePlusQuantity} className="cursor-pointer selection:bg-transparent">
+          &#43;
+        </span>
+      </div>
       <div className="grid grid-cols-2 items-stretch gap-4">
-        <PurchaseMarkup />
+        <PurchaseMarkup quantity={quantity} />
       </div>
     </form>
   );
 }
 
-function PurchaseMarkup() {
+function PurchaseMarkup({ quantity }) {
   const { selectedVariant } = useProductOptions();
   const isOutOfStock = !selectedVariant?.availableForSale || false;
   const { isOpen, openDrawer, closeDrawer } = useDrawer();
@@ -149,9 +179,10 @@ function PurchaseMarkup() {
           <CartDetails onClose={closeDrawer} />
         </div>
       </Drawer>
+
       <AddToCartButton
         variantId={selectedVariant.id}
-        quantity={1}
+        quantity={quantity}
         accessibleAddingToCartLabel="Adding item to your cart"
         disabled={isOutOfStock}
         // onClick={openDrawer}
