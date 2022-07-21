@@ -1,10 +1,9 @@
 import { Link } from "@shopify/hydrogen";
-import logo from "/assets/images/ring.jpg";
 export default function HeroBanner() {
   return (
     <>
       <div
-        style={{ backgroundImage: "url(" + logo + ")" }}
+        style={{ backgroundImage: "url(https://cdn.shopify.com/s/files/1/0652/5829/1412/files/ring.jpg?v=1658384633)" }}
         className="py-64 bg-cover bg-center bg-no-repeat relative after:content[''] after:absolute after:w-full after:h-full after:bg-black after:top-0 after:left-0 after:opacity-30"
       >
         <h1 className="text-white text-4xl font-bold uppercase z-10 relative max-w-2xl mx-auto font-mono">
