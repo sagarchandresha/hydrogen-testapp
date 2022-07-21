@@ -79,7 +79,7 @@ export default function Modal({ product }) {
                             />
                           );
                         })}
-                        <p className="text-sm text-gray-500 ml-auto">
+                        <p className="text-sm text-gray-500">
                           <span className="max-w-prose whitespace-pre-wrap inherit text-copy flex gap-4">
                             <ProductPrice
                               className="text-gray-900 text-lg font-semibold"

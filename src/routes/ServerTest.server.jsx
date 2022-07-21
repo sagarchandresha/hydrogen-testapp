@@ -36,7 +36,7 @@ export default function ServerTest() {
               ))}
             </div>
           </section>
-          <section className="md:px-8 lg:px-12 mb-5">
+          <section className="md:px-8 lg:px-12">
             <LandingFeatureCollection collection={collection}/>
           </section>
         </Suspense>
