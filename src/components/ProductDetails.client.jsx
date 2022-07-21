@@ -37,7 +37,7 @@ export default function ProductDetails({ product }) {
   const parts = product.descriptionHtml.split("<h2>").filter((item) => item);
   return (
     <ProductOptionsProvider data={product}>
-      <section className="w-full overflow-x-hidden gap-4 md:gap-8 grid px-6 md:px-8 lg:px-12">
+      <section className="w-full overflow-x-hidden gap-4 md:gap-6 grid px-6 md:px-8 lg:px-12">
         <div className="grid items-start gap-6 lg:gap-20 md:grid-cols-2 lg:grid-cols-3">
           <div className="mt-5 grid md:grid-flow-row  md:p-0 md:grid-cols-2 md:w-full lg:col-span-2">
             <div className="md:col-span-2 snap-center card-image aspect-square md:w-full w-[80vw]">
@@ -103,7 +103,7 @@ function ProductForm({ product }) {
     quantity != 1 && setQuantity(parseInt(qty) - 1);
   };
   return (
-    <form className="grid gap-10">
+    <form className="grid gap-6">
       {
         <div className="grid gap-4">
           {options.map(({ name, values }) => {
@@ -113,9 +113,9 @@ function ProductForm({ product }) {
             return (
               <div
                 key={name}
-                className="flex flex-wrap items-baseline justify-start gap-6"
+                className="flex flex-wrap justify-start gap-4 items-center"
               >
-                <legend className="whitespace-pre-wrap max-w-prose font-bold text-lead min-w-[4rem]">
+                <legend className="whitespace-pre-wrap max-w-prose font-bold text-lead min-w-[3rem]">
                   {name}
                 </legend>
                 <div className="flex flex-wrap items-baseline gap-4">
@@ -140,8 +140,8 @@ function ProductForm({ product }) {
           quantity={2}
         />
       </div>
-      <div className="quantitySelector flex gap-5">
-        <span onClick={handleMinusQuantity} className="cursor-pointer selection:bg-transparent">
+      <div className="quantitySelector flex">
+        <span onClick={handleMinusQuantity} className="font-bold cursor-pointer selection:bg-transparent border border-cyan-600 px-4 py-3 border-r-0" >
           &#8722;
         </span>
         <input
@@ -149,10 +149,10 @@ function ProductForm({ product }) {
           min={1}
           value={quantity}
           defaultValue={1}
-          className="col-span-2 bg-transparent text-center focus:border-0 focus:outline-none"
-          style={{ maxWidth: "25px;" }}
+          className="font-bold col-span-2 bg-transparent text-center focus:border-0 focus:outline-none border border-cyan-600 px-4 py-3"
+          style={{ maxWidth: "100px;" }}
         />
-        <span onClick={handlePlusQuantity} className="cursor-pointer selection:bg-transparent">
+        <span onClick={handlePlusQuantity} className="font-bold cursor-pointer selection:bg-transparent border border-cyan-600 px-4 py-3 border-l-0" >
           &#43;
         </span>
       </div>
@@ -192,17 +192,17 @@ function PurchaseMarkup({ quantity }) {
           })
         }
       >
-        <span className="uppercase bg-cyan-500 rounded-md text-white inline-block font-medium text-center py-3 px-6 max-w-xl leading-none w-full hover:bg-cyan-800 transition-all ease-in-out duration-500">
+        <span className="uppercase bg-cyan-500 rounded-md text-white inline-block font-medium text-center py-5 px-6 max-w-xl leading-none w-full hover:bg-cyan-800 transition-all ease-in-out duration-500">
           {isOutOfStock ? "Sold out" : "Add to cart"}
         </span>
       </AddToCartButton>
       {isOutOfStock ? (
-        <span className="text-black text-center py-3 px-6 border rounded-sm leading-none ">
+        <span className="text-black text-center py-5 px-6 border rounded-sm leading-none ">
           Available in 2-3 weeks
         </span>
       ) : (
         <BuyNowButton variantId={selectedVariant.id}>
-          <span className="uppercase inline-block rounded-md font-medium text-center py-3 px-6 max-w-xl leading-none border w-full text-cyan-500 border-cyan-500 hover:text-cyan-800 hover:border-cyan-800 transition-all ease-in-out duration-500">
+          <span className="uppercase inline-block rounded-md font-medium text-center py-5 px-6 max-w-xl leading-none border w-full text-cyan-500 border-cyan-500 hover:text-cyan-800 hover:border-cyan-800 transition-all ease-in-out duration-500">
             Buy it now
           </span>
         </BuyNowButton>

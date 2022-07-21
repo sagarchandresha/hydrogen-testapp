@@ -69,24 +69,26 @@ export default function Modal({ product }) {
                   <div className="mt-2">
                     <ProductGallery media={product.media.nodes} />
                     <form className="mt-7">
-                      {options.map(({ name, values }) => {
-                        return values.length == 1 ? null : (
-                          <ProductGridOptions
-                            name={name}
-                            values={values}
-                            openModal={openModal}
-                          />
-                        );
-                      })}
-                      <p className="text-sm text-gray-500">
-                        <span className="max-w-prose whitespace-pre-wrap inherit text-copy flex gap-4">
-                          <ProductPrice
-                            className="text-gray-900 text-lg font-semibold"
-                            variantId={selectedVariant.id}
-                            data={product}
-                          />
-                        </span>
-                      </p>
+                      <div className="flex items-center my-2">
+                        {options.map(({ name, values }) => {
+                          return values.length == 1 ? null : (
+                            <ProductGridOptions
+                              name={name}
+                              values={values}
+                              openModal={openModal}
+                            />
+                          );
+                        })}
+                        <p className="text-sm text-gray-500 ml-auto">
+                          <span className="max-w-prose whitespace-pre-wrap inherit text-copy flex gap-4">
+                            <ProductPrice
+                              className="text-gray-900 text-lg font-semibold"
+                              variantId={selectedVariant.id}
+                              data={product}
+                            />
+                          </span>
+                        </p>
+                      </div>
                       <AddToCartButton
                         variantId={selectedVariant.id}
                         quantity={1}
@@ -149,43 +151,43 @@ function ProductGallery({ media }) {
       className={`grid grid-flow-col md:p-0 w-screen md:w-full grid-cols-3 gap-2`}
     >
       {/* <AwesomeSlider> */}
-        {media.map((med, i) => {
-          let extraProps = {};
+      {media.map((med, i) => {
+        let extraProps = {};
 
-          if (med.mediaContentType === "MODEL_3D") {
-            extraProps = {
-              interactionPromptThreshold: "0",
-              ar: true,
-              loading: "eager",
-              disableZoom: true,
-            };
-          }
-
-          const data = {
-            ...med,
-            image: {
-              ...med.image,
-              altText: med.alt || "Product image",
-            },
+        if (med.mediaContentType === "MODEL_3D") {
+          extraProps = {
+            interactionPromptThreshold: "0",
+            ar: true,
+            loading: "eager",
+            disableZoom: true,
           };
+        }
 
-          return (
-            <div
-              className={`product-slider snap-center card-image bg-white aspect-square md:w-full w-[80vw] shadow-sm rounded`}
-              key={med.id || med.image.id}
-            >
-              <MediaFile
-                tabIndex="0"
-                className={`w-full h-full aspect-square object-cover`}
-                data={data}
-                options={{
-                  crop: "center",
-                }}
-                {...extraProps}
-              />
-            </div>
-          );
-        })}
+        const data = {
+          ...med,
+          image: {
+            ...med.image,
+            altText: med.alt || "Product image",
+          },
+        };
+
+        return (
+          <div
+            className={`product-slider snap-center card-image bg-white aspect-square md:w-full w-[80vw] shadow-sm rounded`}
+            key={med.id || med.image.id}
+          >
+            <MediaFile
+              tabIndex="0"
+              className={`w-full h-full aspect-square object-cover`}
+              data={data}
+              options={{
+                crop: "center",
+              }}
+              {...extraProps}
+            />
+          </div>
+        );
+      })}
       {/* </AwesomeSlider> */}
     </div>
   );
@@ -198,7 +200,7 @@ function ProductGridOptions({ name, values, openModal }) {
       name={name}
       onChange={(e) => setSelectedOption(name, e.target.value)}
       style={{ height: "35px" }}
-      className="inline-block mx-3 my-2 bg-transparent"
+      className="inline-block mx-3 bg-transparent text-sm"
     >
       {values.map(function (value) {
         const selected = selectedOptions[name] === value;
