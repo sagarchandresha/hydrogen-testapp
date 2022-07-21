@@ -200,13 +200,14 @@ function ProductGridOptions({ name, values, openModal }) {
       name={name}
       onChange={(e) => setSelectedOption(name, e.target.value)}
       style={{ height: "35px" }}
+      defaultValue={selectedOptions[name]}
       className="inline-block mx-3 bg-transparent text-sm"
     >
       {values.map(function (value) {
         const selected = selectedOptions[name] === value;
         const id = `option-${name}-${value}`;
         return (
-          <option value={value} defaultValue={selectedOptions[name]} id={id}>
+          <option value={value} id={id}>
             {value}
           </option>
         );
