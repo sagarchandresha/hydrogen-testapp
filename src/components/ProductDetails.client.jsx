@@ -67,7 +67,6 @@ export default function ProductDetails({ product }) {
                           title={item.split("</h2>")[0]}
                           content={item.split("</h2>")[1]}
                         />
-                        <br />
                       </>
                     );
                   })}

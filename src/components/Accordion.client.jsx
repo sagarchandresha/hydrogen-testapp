@@ -3,8 +3,9 @@ import { Disclosure, Transition } from "@headlessui/react";
 export default function Accordion({ title, content }) {
   return (
     <Disclosure>
-      <Disclosure.Button className="py-2">
+      <Disclosure.Button className="py-2 flex justify-between w-full">
         <h2 className="m-0">{title}</h2>
+        <span>&#43;</span>
       </Disclosure.Button>
       <Transition
         enter="transition duration-100 ease-out"
