@@ -85,7 +85,7 @@ export default function HomeProductCard({ product }) {
         {options.map(({ name, values }) => {
           // console.log(values.length);
           return values.length == 1 ? null : (
-            <ProductGridOptions name={name} values={values} />
+            <ProductGridOptions name={name} values={values} productId={product.id}/>
           );
         })}
 
@@ -104,19 +104,19 @@ export default function HomeProductCard({ product }) {
           }
           disabled={isOutOfStock}
         >
-          add to cart
+          {isOutOfStock ? "sold out" : "add to cart"}
         </AddToCartButton>
       </form>
       {!isOutOfStock && <Modal product={product}/>}
     </div>
   );
 }
-function ProductGridOptions({ name, values }) {
+function ProductGridOptions({ name, values, productId }) {
   // console.log("====", values);
   const { selectedOptions, setSelectedOption } = useProductOptions();
   return name != "Color" ? (
     <select
-      name={name}
+      name={productId}
       onChange={(e) => setSelectedOption(name, e.target.value)}
       style={{ height: "35px" }}
       className="inline-block mx-3 my-2 bg-transparent align-text-bottom mb-1"
@@ -134,13 +134,14 @@ function ProductGridOptions({ name, values }) {
   ) : (
     values.map((value) => {
       const checked = selectedOptions[name] === value;
-      const id = `option-${name}-${value}`;
+      // const id = `option-${productId}`;
       return (
-        <label key={id} htmlFor={id} className="inline-block mx-3 my-2 mb-0">
+        // <label key={id} htmlFor={id} className="inline-block mx-3 my-2 mb-0">
+        <label className="inline-block mx-3 my-2 mb-0">
           <input
             className="sr-only w-auto"
             type="radio"
-            id={id}
+            // id={id}
             name={`option[${name}]`}
             value={value}
             checked={checked}
