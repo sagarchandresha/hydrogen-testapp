@@ -1,10 +1,13 @@
+import HomeProductCard from "./HomeProductCard.client";
+
 export default function RecenlyViewed({viewed}) {
-  // const uniqueNames = viewed.filter((val,id,array) => array.indexOf(val) == id);
-  // console.log("***", ...new Set(viewed))
-  return viewed.length > 0 ? (<>
+  const uniqueItems = viewed;
+  const uniqueItemsKeys = Object.keys(uniqueItems);
+  console.log(uniqueItemsKeys);
+  return uniqueItemsKeys.length > 0 ? (<>
     {
-      viewed.map((product) => {
-        return <p key={product.id}>{product.title}</p>
+      uniqueItemsKeys.map((key) => {
+        return <HomeProductCard product={uniqueItems[key]} />
       })
     }
   </>) : null

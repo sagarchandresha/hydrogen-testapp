@@ -15,20 +15,22 @@ import RecenlyViewed from "./RecentlyViewed.client";
 // import "react-awesome-slider/dist/styles.css";
 
 export default function ProductDetails({ product }) {
-  // const [viewed, setViewed] = useState([]);
-  // const recentlyViewed = [];
-  // recentlyViewed.push(product);
-  // console.log(recentlyViewed);
-  // useEffect(() => {
-  //   var viewedProducts = sessionStorage.getItem("viewedProducts");
-  //   if(viewedProducts == null) {
-  //     sessionStorage.setItem("viewedProducts", JSON.stringify(recentlyViewed));
-  //   } else {
-  //     viewedProducts = JSON.parse(viewedProducts);
-  //     viewedProducts = [...recentlyViewed];
-  //     sessionStorage.setItem("viewedProducts", JSON.stringify(recentlyViewed));
-  //   }
-  // }, []);
+  const [viewed, setViewed] = useState({});
+  const recentlyViewed = {};
+  recentlyViewed[product.id] = product;
+  console.log(product);
+  useEffect(() => {
+    var viewedProducts = sessionStorage.getItem("viewedProducts");
+    if(viewedProducts == null) {
+      sessionStorage.setItem("viewedProducts", JSON.stringify(recentlyViewed));
+      setViewed(recentlyViewed);
+    } else {
+      viewedProducts = JSON.parse(viewedProducts);
+      viewedProducts[product.id] = product;
+      sessionStorage.setItem("viewedProducts", JSON.stringify(viewedProducts));
+      setViewed(viewedProducts);
+    }
+  }, []);
 
   const parts = product.descriptionHtml.split("<h2>").filter((item) => item);
   return (
@@ -53,7 +55,7 @@ export default function ProductDetails({ product }) {
             <div className="mt-8">
               {product.descriptionHtml.search("<h2>") !== -1 ? (
                 <div
-                  className="prose border-t border-gray-200 pt-6 text-black text-md"
+                  className="prose border-t border-gray-200 text-black text-md"
                   // dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
                 >
                   {parts.map((item) => {
@@ -78,9 +80,9 @@ export default function ProductDetails({ product }) {
           </div>
         </div>
       </section>
-      <section>
-        {/* <RecenlyViewed viewed={viewed} /> */}
-      </section>
+      {/* <section>
+        <RecenlyViewed viewed={viewed} />
+      </section> */}
     </ProductOptionsProvider>
   );
 }
@@ -114,19 +116,18 @@ function ProductForm({ product }) {
       }
       <div>
         <ProductPrice
-          className="text-gray-500 line-through text-lg font-semibold"
+          className="text-gray-500 line-through text-sm font-semibold inline-block"
           priceType="compareAt"
           variantId={selectedVariant.id}
           data={product}
         />
-        -
         <ProductPrice
-          className="text-gray-900 text-lg font-semibold"
+          className="text-gray-900 text-xl font-semibold inline-block ml-2"
           variantId={selectedVariant.id}
           data={product}
         />
       </div>
-      <div className="grid items-stretch gap-4">
+      <div className="grid grid-cols-2 items-stretch gap-4">
         <PurchaseMarkup />
       </div>
     </form>
@@ -161,7 +162,7 @@ function PurchaseMarkup() {
           })
         }
       >
-        <span className="bg-black text-white inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none w-full">
+        <span className="uppercase bg-cyan-500 rounded-md text-white inline-block font-medium text-center py-3 px-6 max-w-xl leading-none w-full hover:bg-cyan-800 transition-all ease-in-out duration-500">
           {isOutOfStock ? "Sold out" : "Add to cart"}
         </span>
       </AddToCartButton>
@@ -171,7 +172,7 @@ function PurchaseMarkup() {
         </span>
       ) : (
         <BuyNowButton variantId={selectedVariant.id}>
-          <span className="inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none border w-full">
+          <span className="uppercase inline-block rounded-md font-medium text-center py-3 px-6 max-w-xl leading-none border w-full text-cyan-500 border-cyan-500 hover:text-cyan-800 hover:border-cyan-800 transition-all ease-in-out duration-500">
             Buy it now
           </span>
         </BuyNowButton>

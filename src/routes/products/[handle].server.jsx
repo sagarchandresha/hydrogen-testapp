@@ -24,7 +24,7 @@ export default function Product({ params }) {
       handle,
     },
   });
-  
+
   useServerAnalytics({
     shopify: {
       pageType: ShopifyAnalyticsConstants.pageType.product,
@@ -88,6 +88,14 @@ const PRODUCT_QUERY = gql`
       media(first: 7) {
         nodes {
           ...MediaFields
+        }
+      }
+      images(first: 2) {
+        nodes {
+          url
+          altText
+          width
+          height
         }
       }
       variants(first: 100) {

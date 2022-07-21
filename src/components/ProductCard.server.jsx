@@ -12,7 +12,7 @@ export default function ProductCard({ product }) {
         <div className="grid gap-6">
           <div className="shadow-sm rounded relative">
             {isDiscounted && (
-              <label className="subpixel-antialiased absolute top-0 right-0 m-4 text-right text-notice text-red-600 text-xs">
+              <label className="subpixel-antialiased absolute top-0 right-0 p-2 bg-red-600 text-right text-notice text-white text-xs font-bold uppercase">
                 Sale
               </label>
             )}

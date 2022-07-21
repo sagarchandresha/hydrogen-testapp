@@ -7,7 +7,7 @@ import {
   useProductOptions,
   ProductPrice,
 } from "@shopify/hydrogen";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Drawer, useDrawer } from "./Drawer.client";
 import { CartDetails } from "./CartDetails.client";
 import Modal from "./Modal.client";
@@ -119,7 +119,7 @@ function ProductGridOptions({ name, values }) {
       name={name}
       onChange={(e) => setSelectedOption(name, e.target.value)}
       style={{ height: "35px" }}
-      className="inline-block mx-3 my-2 bg-transparent"
+      className="inline-block mx-3 my-2 bg-transparent align-text-bottom mb-1"
     >
       {values.map(function (value) {
         const selected = selectedOptions[name] === value;
@@ -136,7 +136,7 @@ function ProductGridOptions({ name, values }) {
       const checked = selectedOptions[name] === value;
       const id = `option-${name}-${value}`;
       return (
-        <label key={id} htmlFor={id} className="inline-block mx-3 my-2">
+        <label key={id} htmlFor={id} className="inline-block mx-3 my-2 mb-0">
           <input
             className="sr-only w-auto"
             type="radio"
@@ -147,10 +147,10 @@ function ProductGridOptions({ name, values }) {
             onChange={() => setSelectedOption(name, value)}
           />
           <div
-            className={`rounded-full leading-none border-b-[2px] py-1 cursor-pointer transition-all duration-200 border-2 ${
+            className={`rounded-full leading-none border-b-[2px] cursor-pointer transition-all duration-200 border-2 p-4 ${
               checked ? "border-black" : "border-transparent"
             }`}
-            style={{ backgroundColor: value, width: "35px", height: "35px" }}
+            style={{ backgroundColor: value }}
           ></div>
         </label>
       );
