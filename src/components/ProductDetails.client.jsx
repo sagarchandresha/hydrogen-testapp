@@ -82,9 +82,9 @@ export default function ProductDetails({ product }) {
           </div>
         </div>
       </section>
-      {/* <section>
+      <section className="grid-flow-row grid gap-2 gap-y-6 px-6 md:px-8 lg:px-12 md:gap-4 lg:gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-4">
         <RecenlyViewed viewed={viewed} />
-      </section> */}
+      </section>
     </ProductOptionsProvider>
   );
 }
