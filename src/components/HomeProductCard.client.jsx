@@ -3,12 +3,15 @@ import {
   Image,
   Money,
   AddToCartButton,
-  ProductOptionsProvider,
   useProductOptions,
+  ProductPrice,
+  useCart,
 } from "@shopify/hydrogen";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Drawer, useDrawer } from "./Drawer.client";
 import { CartDetails } from "./CartDetails.client";
+import Modal from "./Modal.client";
+// import 'react-awesome-slider/dist/styles.css';
 
 export default function HomeProductCard({ product }) {
   const { isOpen, openDrawer, closeDrawer } = useDrawer();
@@ -19,7 +22,17 @@ export default function HomeProductCard({ product }) {
 
   const isDiscounted = compareAtPrice?.amount > price?.amount;
   const [isProductHover, setIsProductHover] = useState(false);
-
+  const [addingItem, setAddingItem] = useState(false);
+  const buttonRef = useRef();
+  const { status } = useCart();
+  useEffect(() => {
+    if ( addingItem && status === 'idle') {
+      setAddingItem(false);
+      buttonRef.current.innerHTML = isOutOfStock ? "sold out" : "add to cart";
+      openDrawer();
+    } 
+  }, [status, addingItem]);
+  
   return (
     <div className="flex flex-col">
       <Drawer open={isOpen} onClose={closeDrawer}>
@@ -31,6 +44,7 @@ export default function HomeProductCard({ product }) {
         </div>
       </Drawer>
       <Link
+        key={product.id}
         to={`/products/${product.handle}`}
         onMouseEnter={() => setIsProductHover(true)}
         onMouseLeave={() => setIsProductHover(false)}
@@ -67,14 +81,11 @@ export default function HomeProductCard({ product }) {
             </h3>
             <div className="flex gap-4">
               <span className="max-w-prose whitespace-pre-wrap inherit text-copy flex gap-4">
-                <Money withoutTrailingZeros data={price} />
-                {isDiscounted && (
-                  <Money
-                    className="line-through opacity-50"
-                    withoutTrailingZeros
-                    data={compareAtPrice}
-                  />
-                )}
+                <ProductPrice
+                  className="text-gray-900 text-lg font-semibold"
+                  variantId={selectedVariant.id}
+                  data={product}
+                />
               </span>
             </div>
           </div>
@@ -84,35 +95,46 @@ export default function HomeProductCard({ product }) {
         {options.map(({ name, values }) => {
           // console.log(values.length);
           return values.length == 1 ? null : (
-            <ProductGridOptions name={name} values={values} />
+            <ProductGridOptions
+              name={name}
+              values={values}
+              productId={product.id}
+            />
           );
         })}
-
         <AddToCartButton
           variantId={selectedVariant.id}
           quantity={1}
-          accessibleAddingToCartLabel="...."
-          className={`bg-rose-600 text-white inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none w-full uppercase ${isOutOfStock && "opacity-50"}`}
-          onClick={!isOutOfStock && (() => {
-            setTimeout(() => openDrawer(), 1000)
-          })}
+          accessibleAddingToCartLabel="adding to cart"
+          className={`bg-rose-600 text-white inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none w-full uppercase ${
+            isOutOfStock && "opacity-50"
+          }`}
+          onClick={
+            !isOutOfStock &&
+            (() => {
+              setAddingItem(true);
+              buttonRef.current.innerHTML = "Adding...";
+            })
+          }
           disabled={isOutOfStock}
+          buttonRef={buttonRef}
         >
-          add to cart
+          {isOutOfStock ? "sold out" : "add to cart"}
         </AddToCartButton>
       </form>
+      {!isOutOfStock && <Modal product={product} />}
     </div>
   );
 }
-function ProductGridOptions({ name, values }) {
+function ProductGridOptions({ name, values, productId }) {
   // console.log("====", values);
   const { selectedOptions, setSelectedOption } = useProductOptions();
-  return name == "Size" ? (
+  return name != "Color" ? (
     <select
-      name={name}
+      name={productId}
       onChange={(e) => setSelectedOption(name, e.target.value)}
-      style = {{ height: "35px" }}
-      className="inline-block mx-3 my-2 bg-transparent"
+      style={{ height: "35px" }}
+      className="inline-block mx-3 my-2 bg-transparent align-text-bottom mb-1"
     >
       {values.map(function (value) {
         const selected = selectedOptions[name] === value;
@@ -127,25 +149,25 @@ function ProductGridOptions({ name, values }) {
   ) : (
     values.map((value) => {
       const checked = selectedOptions[name] === value;
-      const id = `option-${name}-${value}`;
+      // const id = `option-${productId}`;
       return (
-        <label key={id} htmlFor={id} className="inline-block mx-3 my-2">
+        // <label key={id} htmlFor={id} className="inline-block mx-3 my-2 mb-0">
+        <label className="inline-block mx-3 my-2 mb-0">
           <input
             className="sr-only w-auto"
             type="radio"
-            id={id}
+            // id={id}
             name={`option[${name}]`}
             value={value}
             checked={checked}
             onChange={() => setSelectedOption(name, value)}
           />
           <div
-            className={`rounded-full leading-none border-b-[2px] py-1 cursor-pointer transition-all duration-200 border-2 ${
+            className={`rounded-full leading-none border-b-[2px] cursor-pointer transition-all duration-200 border-2 p-4 ${
               checked ? "border-black" : "border-transparent"
             }`}
-            style = {{ backgroundColor: value, width: "35px", height: "35px" }}
-          >
-          </div>
+            style={{ backgroundColor: value }}
+          ></div>
         </label>
       );
     })
