@@ -3,11 +3,11 @@ import {
   Image,
   Money,
   AddToCartButton,
-  ProductOptionsProvider,
   useProductOptions,
   ProductPrice,
+  useCart,
 } from "@shopify/hydrogen";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Drawer, useDrawer } from "./Drawer.client";
 import { CartDetails } from "./CartDetails.client";
 import Modal from "./Modal.client";
@@ -22,7 +22,17 @@ export default function HomeProductCard({ product }) {
 
   const isDiscounted = compareAtPrice?.amount > price?.amount;
   const [isProductHover, setIsProductHover] = useState(false);
-
+  const [addingItem, setAddingItem] = useState(false);
+  const buttonRef = useRef();
+  const { status } = useCart();
+  useEffect(() => {
+    if ( addingItem && status === 'idle') {
+      setAddingItem(false);
+      buttonRef.current.innerHTML = isOutOfStock ? "sold out" : "add to cart";
+      openDrawer();
+    } 
+  }, [status, addingItem]);
+  
   return (
     <div className="flex flex-col">
       <Drawer open={isOpen} onClose={closeDrawer}>
@@ -85,29 +95,34 @@ export default function HomeProductCard({ product }) {
         {options.map(({ name, values }) => {
           // console.log(values.length);
           return values.length == 1 ? null : (
-            <ProductGridOptions name={name} values={values} productId={product.id}/>
+            <ProductGridOptions
+              name={name}
+              values={values}
+              productId={product.id}
+            />
           );
         })}
-
         <AddToCartButton
           variantId={selectedVariant.id}
           quantity={1}
-          accessibleAddingToCartLabel="...."
+          accessibleAddingToCartLabel="adding to cart"
           className={`bg-rose-600 text-white inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none w-full uppercase ${
             isOutOfStock && "opacity-50"
           }`}
           onClick={
             !isOutOfStock &&
             (() => {
-              setTimeout(() => openDrawer(), 1000);
+              setAddingItem(true);
+              buttonRef.current.innerHTML = "Adding...";
             })
           }
           disabled={isOutOfStock}
+          buttonRef={buttonRef}
         >
           {isOutOfStock ? "sold out" : "add to cart"}
         </AddToCartButton>
       </form>
-      {!isOutOfStock && <Modal product={product}/>}
+      {!isOutOfStock && <Modal product={product} />}
     </div>
   );
 }

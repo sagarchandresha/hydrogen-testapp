@@ -7,8 +7,9 @@ import {
   AddToCartButton,
   CartLineQuantityAdjustButton,
   CartLineQuantity,
+  useCart,
 } from "@shopify/hydrogen";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Accordion from "./Accordion.client";
 import { CartDetails } from "./CartDetails.client";
 import { Drawer, useDrawer } from "./Drawer.client";
@@ -167,7 +168,16 @@ function PurchaseMarkup({ quantity }) {
   const { selectedVariant } = useProductOptions();
   const isOutOfStock = !selectedVariant?.availableForSale || false;
   const { isOpen, openDrawer, closeDrawer } = useDrawer();
-
+  const [addingItem, setAddingItem] = useState(false);
+  const buttonRef = useRef();
+  const { status } = useCart();
+  useEffect(() => {
+    if (addingItem && status === "idle") {
+      setAddingItem(false);
+      openDrawer();
+      buttonRef.current.innerHTML = isOutOfStock ? "sold out" : "add to cart";
+    }
+  }, [status, addingItem]);
   return (
     <>
       <Drawer open={isOpen} onClose={closeDrawer}>
@@ -184,15 +194,15 @@ function PurchaseMarkup({ quantity }) {
         quantity={quantity}
         accessibleAddingToCartLabel="Adding item to your cart"
         disabled={isOutOfStock}
-        // onClick={openDrawer}
         onClick={
           !isOutOfStock &&
           (() => {
-            setTimeout(() => openDrawer(), 1000);
+            setAddingItem(true);
+            buttonRef.current.innerHTML = "Adding...";
           })
         }
       >
-        <span className="uppercase bg-cyan-500 rounded-md text-white inline-block font-medium text-center py-5 px-6 max-w-xl leading-none w-full hover:bg-cyan-800 transition-all ease-in-out duration-500">
+        <span className="uppercase bg-cyan-500 rounded-md text-white inline-block font-medium text-center py-5 px-6 max-w-xl leading-none w-full hover:bg-cyan-800 transition-all ease-in-out duration-500" ref={buttonRef}>
           {isOutOfStock ? "Sold out" : "Add to cart"}
         </span>
       </AddToCartButton>

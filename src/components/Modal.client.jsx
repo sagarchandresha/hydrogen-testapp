@@ -3,20 +3,29 @@ import {
   AddToCartButton,
   MediaFile,
   ProductPrice,
+  useCart,
   useProductOptions,
 } from "@shopify/hydrogen";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 // import AwesomeSlider from "react-awesome-slider";
 
 export default function Modal({ product }) {
   const [isOpen, setIsOpen] = useState(false);
   const { options, selectedVariant } = useProductOptions();
   const isOutOfStock = !selectedVariant?.availableForSale || false;
-
+  const [addingItem, setAddingItem] = useState(false);
+  const buttonRef = useRef();
+  const { status } = useCart();
+  useEffect(() => {
+    if (addingItem && status === "idle") {
+      setAddingItem(false);
+      setIsOpen(false);
+      buttonRef.current.innerHTML = isOutOfStock ? "sold out" : "add to cart";
+    }
+  }, [status, addingItem]);
   function closeModal() {
     setIsOpen(false);
   }
-
   function openModal() {
     console.log("openModal");
     setIsOpen(true);
@@ -92,19 +101,21 @@ export default function Modal({ product }) {
                       <AddToCartButton
                         variantId={selectedVariant.id}
                         quantity={1}
-                        accessibleAddingToCartLabel="...."
+                        accessibleAddingToCartLabel="adding to cart"
                         className={`bg-rose-600 text-white inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none w-full uppercase ${
                           isOutOfStock && "opacity-50"
                         }`}
                         onClick={
                           !isOutOfStock &&
                           (() => {
-                            setTimeout(() => closeModal(), 1000);
+                            setAddingItem(true);
+                            buttonRef.current.innerHTML = "Adding...";
                           })
                         }
                         disabled={isOutOfStock}
+                        buttonRef={buttonRef}
                       >
-                        add to cart
+                        {isOutOfStock ? "sold out" : "add to cart"}
                       </AddToCartButton>
                     </form>
                   </div>
