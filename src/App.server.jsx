@@ -4,6 +4,7 @@ import {
   FileRoutes,
   ShopifyProvider,
   CartProvider,
+  ShopifyAnalytics,
 } from "@shopify/hydrogen";
 import { Suspense } from "react";
 
