@@ -11,7 +11,6 @@ export default function Home() {
         <div className="text-center">
           <HeroBanner />
           <ServerTest />
-          <ShopifyAnalytics cookieDomain="hydrogen-testapp.netlify.app"/>
         </div>
       </Suspense>
     </Layout>
