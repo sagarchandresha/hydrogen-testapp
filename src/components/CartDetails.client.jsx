@@ -24,7 +24,7 @@ export function CartDetails({ onClose }) {
         aria-labelledby="cart-contents"
         className="px-4 pb-4 overflow-auto transition md:px-12"
       >
-        <ul className="grid gap-6 md:gap-10 overflow-y-scroll">
+        <ul className="grid gap-6 md:gap-10 overflow-y-auto">
           {lines.map((line) => {
             return (
               <CartLineProvider key={line.id} line={line}>
