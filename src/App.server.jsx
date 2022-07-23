@@ -16,6 +16,7 @@ function App({ routes }) {
               <FileRoutes routes={routes} />
             </Router>
           </CartProvider>
+          <ShopifyAnalytics cookieDomain="hydrogen-testapp.netlify.app"/>
       </ShopifyProvider>
     </Suspense>
   );
