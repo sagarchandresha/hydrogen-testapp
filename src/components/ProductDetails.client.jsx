@@ -5,8 +5,6 @@ import {
   ProductPrice,
   BuyNowButton,
   AddToCartButton,
-  CartLineQuantityAdjustButton,
-  CartLineQuantity,
   useCart,
 } from "@shopify/hydrogen";
 import { useEffect, useRef, useState } from "react";
@@ -14,6 +12,7 @@ import Accordion from "./Accordion.client";
 import { CartDetails } from "./CartDetails.client";
 import { Drawer, useDrawer } from "./Drawer.client";
 import RecenlyViewed from "./RecentlyViewed.client";
+import styles from "../styles/ProductDetails.module.css";
 // import AwesomeSlider from "react-awesome-slider";
 // import "react-awesome-slider/dist/styles.css";
 
@@ -150,8 +149,7 @@ function ProductForm({ product }) {
           min={1}
           value={quantity}
           defaultValue={1}
-          className="font-bold col-span-2 bg-transparent text-center focus:border-0 focus:outline-none border border-cyan-600 px-4 py-3"
-          style={{ maxWidth: "100px;" }}
+          className={`font-bold col-span-2 bg-transparent text-center focus:border-0 focus:outline-none border border-cyan-600 px-4 py-3 ${styles.max_width_100}`}
         />
         <span onClick={handlePlusQuantity} className="font-bold cursor-pointer selection:bg-transparent border border-cyan-600 px-4 py-3 border-l-0" >
           &#43;
@@ -242,12 +240,11 @@ function OptionRadio({ values, name }) {
               onChange={() => setSelectedOption(name, value)}
             />
             <div
-              className={`relative leading-none border-b-[2px] cursor-pointer transition-all duration-200 rounded-full border ${
+              className={`w-9 h-9 relative leading-none border-b-[2px] cursor-pointer transition-all duration-200 rounded-full border ${
                 checked
                   ? "bg-black text-white border-transparent"
                   : "text-black bg-transparent border-black"
               }`}
-              style={{ width: "35px", height: "35px" }}
             >
               <span className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
                 {value[0]}
@@ -274,10 +271,10 @@ function OptionRadio({ values, name }) {
               onChange={() => setSelectedOption(name, value)}
             />
             <div
-              className={`rounded-full leading-none border-b-[2px] py-1 cursor-pointer transition-all duration-200 border-2 ${
+              className={`w-9 h-9 rounded-full leading-none border-b-[2px] py-1 cursor-pointer transition-all duration-200 border-2 ${
                 checked ? "border-black" : "border-transparent"
               }`}
-              style={{ backgroundColor: value, width: "35px", height: "35px" }}
+              style={{ backgroundColor: value }}
             ></div>
           </label>
         );
