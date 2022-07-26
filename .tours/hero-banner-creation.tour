@@ -1,0 +1,31 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Hero Banner Creation",
+  "steps": [
+    {
+      "file": "src/components/HeroBanner.client.jsx",
+      "description": "Create client jsx file for Hero banner and export JSX function",
+      "line": 1
+    },
+    {
+      "file": "src/styles/HeroBanner.module.css",
+      "description": "Add Module CSS file for specific Hero banner component.",
+      "line": 1
+    },
+    {
+      "file": "src/components/HeroBanner.client.jsx",
+      "description": "Import module css for as \"styles\" in your hero banner component.",
+      "line": 2
+    },
+    {
+      "file": "src/routes/index.server.jsx",
+      "description": "Import Hero banner component where you want to use.",
+      "line": 3
+    },
+    {
+      "file": "src/routes/index.server.jsx",
+      "description": "Add / Use Hero banner component.",
+      "line": 12
+    }
+  ]
+}
