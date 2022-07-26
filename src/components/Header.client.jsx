@@ -1,6 +1,7 @@
 import { useUrl, Link, useCart } from "@shopify/hydrogen";
 import { Drawer, useDrawer } from "./Drawer.client";
 import { CartDetails } from "./CartDetails.client";
+import Menu from "./Menu.client";
 
 export default function Header({ shop }) {
   const { pathname } = useUrl();
@@ -28,7 +29,7 @@ export default function Header({ shop }) {
             {shop.name}
           </Link>
         </div>
-
+        <Menu />
         <button
           onClick={openDrawer}
           className="relative flex items-center justify-center w-8 h-8"
