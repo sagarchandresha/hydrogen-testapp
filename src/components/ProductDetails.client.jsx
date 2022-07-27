@@ -19,8 +19,9 @@ import ToggleSwitch from "./ToggleSwitch.client";
 
 export default function ProductDetails({ product }) {
   const [viewed, setViewed] = useState({});
-  const [recentEnabled, setRecentEnabled] = useState(false);
   const recentlyViewed = {};
+  const [recentEnabled, setRecentEnabled] = useState(true);
+  
   recentlyViewed[product.id] = product;
   useEffect(() => {
     var viewedProducts = sessionStorage.getItem("viewedProducts");
@@ -36,8 +37,9 @@ export default function ProductDetails({ product }) {
       setViewed(viewedProducts);
     }
   }, []);
-
+   
   const parts = product.descriptionHtml.split("<h2>").filter((item) => item);
+  
   return (
     <ProductOptionsProvider data={product}>
       <section className="w-full overflow-x-hidden gap-4 md:gap-6 grid px-6 md:px-8 lg:px-12">
@@ -48,7 +50,7 @@ export default function ProductDetails({ product }) {
             </div>
           </div>
 
-          <div className="sticky w-full md:mx-auto grid gap-8 p-0 md:p-6 md:px-0 top-[6rem] lg:top-[8rem] xl:top-[10rem]">
+          <div className="sticky w-full md:mx-auto grid gap-8 p-0 md:p-6 md:px-0 top-0 ">
             <ToggleSwitch
               enabled={recentEnabled}
               setEnabled={setRecentEnabled}
@@ -90,8 +92,7 @@ export default function ProductDetails({ product }) {
           </div>
         </div>
       </section>
-      {recentEnabled &&
-      (
+      {recentEnabled && (
         <section>
           <RecenlyViewed viewed={viewed} productId={product.id} />
         </section>
