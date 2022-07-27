@@ -6,6 +6,7 @@ import {
   useProductOptions,
   ProductPrice,
   useCart,
+  useUrl,
 } from "@shopify/hydrogen";
 import { useEffect, useRef, useState } from "react";
 import { Drawer, useDrawer } from "./Drawer.client";
@@ -14,6 +15,8 @@ import Modal from "./Modal.client";
 // import 'react-awesome-slider/dist/styles.css';
 
 export default function HomeProductCard({ product }) {
+  const { pathname } = useUrl();
+  const isHome = pathname === "/";
   const { isOpen, openDrawer, closeDrawer } = useDrawer();
   const { options, selectedVariant } = useProductOptions();
   const isOutOfStock = !selectedVariant?.availableForSale || false;
@@ -91,7 +94,8 @@ export default function HomeProductCard({ product }) {
           </div>
         </div>
       </Link>
-      <form className="mt-auto">
+      
+      {isHome && <form className="mt-auto">
         {options.map(({ name, values }) => {
           // console.log(values.length);
           return values.length == 1 ? null : (
@@ -121,8 +125,8 @@ export default function HomeProductCard({ product }) {
         >
           {isOutOfStock ? "sold out" : "add to cart"}
         </AddToCartButton>
-      </form>
-      {!isOutOfStock && <Modal product={product} />}
+      </form>}
+      {(!isOutOfStock && isHome) && <Modal product={product} />}
     </div>
   );
 }
