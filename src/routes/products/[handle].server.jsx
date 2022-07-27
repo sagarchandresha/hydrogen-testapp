@@ -85,6 +85,7 @@ const PRODUCT_QUERY = gql`
       title
       vendor
       descriptionHtml
+      handle
       media(first: 7) {
         nodes {
           ...MediaFields
