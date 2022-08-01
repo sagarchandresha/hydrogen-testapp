@@ -14,6 +14,7 @@ import { Drawer, useDrawer } from "./Drawer.client";
 import RecenlyViewed from "./RecentlyViewed.client";
 import styles from "../styles/ProductDetails.module.css";
 import ToggleSwitch from "./ToggleSwitch.client";
+import SizeGuide from "./Product/SizeGuide.client";
 // import AwesomeSlider from "react-awesome-slider";
 // import "react-awesome-slider/dist/styles.css";
 
@@ -21,7 +22,8 @@ export default function ProductDetails({ product }) {
   const [viewed, setViewed] = useState({});
   const recentlyViewed = {};
   const [recentEnabled, setRecentEnabled] = useState(true);
-  
+  const parts = product.descriptionHtml.split("<h2>").filter((item) => item);
+    
   recentlyViewed[product.id] = product;
   useEffect(() => {
     var viewedProducts = sessionStorage.getItem("viewedProducts");
@@ -38,7 +40,6 @@ export default function ProductDetails({ product }) {
     }
   }, []);
    
-  const parts = product.descriptionHtml.split("<h2>").filter((item) => item);
   
   return (
     <ProductOptionsProvider data={product}>
@@ -51,11 +52,11 @@ export default function ProductDetails({ product }) {
           </div>
 
           <div className="sticky w-full md:mx-auto grid gap-8 p-0 md:p-6 md:px-0 top-0 ">
-            <ToggleSwitch
+            {/* <ToggleSwitch
               enabled={recentEnabled}
               setEnabled={setRecentEnabled}
               title=" Recently Viewed Section"
-            />
+            /> */}
             <div className="grid gap-2">
               <h1 className="text-4xl font-bold leading-10 whitespace-normal">
                 {product.title}
@@ -104,6 +105,7 @@ export default function ProductDetails({ product }) {
 function ProductForm({ product }) {
   const { options, selectedVariant } = useProductOptions();
   const [quantity, setQuantity] = useState(1);
+  const isBraceletProduct = product.collections.nodes.filter((item) => item.title.toLowerCase() === "bracelets")
 
   const handlePlusQuantity = (e) => {
     e.preventDefault();
@@ -152,6 +154,7 @@ function ProductForm({ product }) {
           data={product}
           quantity={2}
         />
+        {isBraceletProduct.length !== 0 && <SizeGuide />}
       </div>
       <div className="quantitySelector flex">
         <span
