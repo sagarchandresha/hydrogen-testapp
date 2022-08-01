@@ -16,26 +16,43 @@ export default function NewFooter({ shop }) {
       <div>
         <ul className="flex items-center gap-3">
           <li>
-            <Image src="/assets/images/amax.svg" width="auto" height="auto" />
+            <Image
+              src="/assets/images/amax.svg"
+              width="auto"
+              height="auto"
+              alt="amax"
+            />
           </li>
           <li>
-            <Image src="/assets/images/amazon.svg" width="auto" height="auto" />
+            <Image
+              src="/assets/images/amazon.svg"
+              width="auto"
+              height="auto"
+              alt="amazon"
+            />
           </li>
           <li>
             <Image
               src="/assets/images/applePay.svg"
               width="auto"
               height="auto"
+              alt="apple pay"
             />
           </li>
           <li>
-            <Image src="/assets/images/payPal.svg" width="auto" height="auto" />
+            <Image
+              src="/assets/images/payPal.svg"
+              width="auto"
+              height="auto"
+              alt="paypal"
+            />
           </li>
           <li>
             <Image
               src="/assets/images/shopPay.svg"
               width="auto"
               height="auto"
+              alt="shop pay"
             />
           </li>
         </ul>
