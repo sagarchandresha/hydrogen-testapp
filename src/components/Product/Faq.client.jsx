@@ -30,7 +30,7 @@ const Faq = () => {
           </Typography>
         </AccordionDetails>
       </Accordion>
-      <Accordion className="border border-b-black mb-1 bg-transparent shadow-none before:hidden" expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+      <Accordion className="!border !border-b-black !mb-1 !bg-transparent !shadow-none before:hidden" expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel2a-content"
@@ -45,7 +45,7 @@ const Faq = () => {
           </Typography>
         </AccordionDetails>
       </Accordion>
-      <Accordion className="border border-b-black mb-1 bg-transparent shadow-none before:hidden" expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+      <Accordion className="!border !border-b-black !mb-1 !bg-transparent !shadow-none before:hidden" expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel2a-content"
