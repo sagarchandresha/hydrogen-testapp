@@ -15,6 +15,7 @@ import RecenlyViewed from "./RecentlyViewed.client";
 import styles from "../styles/ProductDetails.module.css";
 import ToggleSwitch from "./ToggleSwitch.client";
 import SizeGuide from "./Product/SizeGuide.client";
+import Faq from "./Product/Faq.client";
 // import AwesomeSlider from "react-awesome-slider";
 // import "react-awesome-slider/dist/styles.css";
 
@@ -93,6 +94,9 @@ export default function ProductDetails({ product }) {
           </div>
         </div>
       </section>
+      <div className="px-6 md:px-8 lg:px-12">
+        <Faq />
+      </div>
       {recentEnabled && (
         <section>
           <RecenlyViewed viewed={viewed} productId={product.id} />
