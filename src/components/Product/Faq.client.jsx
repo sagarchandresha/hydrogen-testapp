@@ -15,7 +15,7 @@ const Faq = () => {
   return (
     <>
     <h2 className="block text-center text-3xl text-cyan-800 uppercase font-bold pb-3">Frequently Ask Question</h2>
-      <Accordion className="border border-b-black mb-1 bg-transparent shadow-none before:hidden" expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+      <Accordion className="!border !border-b-black !mb-1 !bg-transparent !shadow-none before:hidden" expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
