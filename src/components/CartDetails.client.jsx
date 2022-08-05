@@ -24,7 +24,7 @@ export function CartDetails({ onClose }) {
         aria-labelledby="cart-contents"
         className="px-4 pb-4 overflow-auto transition md:px-12"
       >
-        <ul className="grid gap-6 md:gap-10 overflow-y-scroll">
+        <ul className="grid gap-6 md:gap-10 overflow-y-auto">
           {lines.map((line) => {
             return (
               <CartLineProvider key={line.id} line={line}>
@@ -50,12 +50,12 @@ export function CartDetails({ onClose }) {
 export function CartEmpty({ onClose }) {
   return (
     <div className="flex flex-col space-y-7 justify-center items-center md:py-8 md:px-12 px-4 py-6 h-screen">
-      <h2 className="whitespace-pre-wrap max-w-prose font-bold text-4xl">
+      <h2 className="whitespace-pre-wrap max-w-prose font-bold text-2xl uppercase">
         Your cart is empty
       </h2>
       <button
         onClick={onClose}
-        className="inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none bg-black text-white w-full"
+        className="text-center max-w-xl leading-none w-full inline-block text-white uppercase px-6 py-3 bg-rose-600 rounded-lg hover:bg-rose-800 transition-all ease-in-out duration-500 font-semibold"
       >
         Continue shopping
       </button>
@@ -70,11 +70,11 @@ function CartCheckoutActions() {
         <Link
           to={checkoutUrl}
           width="full"
-          className="inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none bg-black text-white w-full"
+          className="text-center max-w-xl leading-none w-full inline-block text-white uppercase px-6 py-3 bg-rose-600 rounded-lg hover:bg-rose-800 transition-all ease-in-out duration-500 font-semibold"
         >
           Continue to Checkout
         </Link>
-        <CartShopPayButton className="flex items-center justify-center rounded-sm mt-2 bg-[#5a31f4] w-full" />
+        <CartShopPayButton className="flex items-center justify-center mt-2 bg-[#5a31f4] w-full rounded-lg" />
       </div>
     </>
   );
@@ -144,13 +144,13 @@ export function CartLineItem() {
             <button
               type="button"
               onClick={() => linesRemove(lineId)}
-              className="h-[40px] w-[40px] border rounded flex justify-center items-center"
+              className="h-[40px] w-[40px] border border-cyan-700 flex justify-center items-center"
             >
               <span className="sr-only">Remove</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                className="w-[13px] h-[14px]"
+                viewBox="0 0 18 18"
+                className="w-[18px] h-[18px] ml-1 mt-1"
               >
                 <title>Remove</title>
                 <path
@@ -175,7 +175,7 @@ function CartLineQuantityAdjust({ lineId, quantity }) {
       <label htmlFor={`quantity-${lineId}`} className="sr-only">
         Quantity, {quantity}
       </label>
-      <div className="flex items-center overflow-auto border rounded">
+      <div className="flex items-center overflow-auto border border-cyan-700">
         <CartLineQuantityAdjustButton
           adjust="decrease"
           aria-label="Decrease quantity"

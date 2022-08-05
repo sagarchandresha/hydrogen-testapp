@@ -4,8 +4,10 @@ import {
   FileRoutes,
   ShopifyProvider,
   CartProvider,
+  ShopifyAnalytics,
 } from "@shopify/hydrogen";
 import { Suspense } from "react";
+import AnalyticsListener from "./components/AnalyticsListener.client";
 
 function App({ routes }) {
   return (
@@ -16,6 +18,8 @@ function App({ routes }) {
               <FileRoutes routes={routes} />
             </Router>
           </CartProvider>
+          {/* <ShopifyAnalytics cookieDomain="hydrogen-testapp.netlify.app"/> */}
+          <AnalyticsListener />
       </ShopifyProvider>
     </Suspense>
   );

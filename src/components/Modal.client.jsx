@@ -3,20 +3,31 @@ import {
   AddToCartButton,
   MediaFile,
   ProductPrice,
+  useCart,
   useProductOptions,
 } from "@shopify/hydrogen";
-import { Fragment, useState } from "react";
+
 import Slider from '@ant-design/react-slick';
+
+import { Fragment, useEffect, useRef, useState } from "react";
 
 export default function Modal({ product }) {
   const [isOpen, setIsOpen] = useState(false);
   const { options, selectedVariant } = useProductOptions();
   const isOutOfStock = !selectedVariant?.availableForSale || false;
-
+  const [addingItem, setAddingItem] = useState(false);
+  const buttonRef = useRef();
+  const { status } = useCart();
+  useEffect(() => {
+    if (addingItem && status === "idle") {
+      setAddingItem(false);
+      setIsOpen(false);
+      buttonRef.current.innerHTML = isOutOfStock ? "sold out" : "add to cart";
+    }
+  }, [status, addingItem]);
   function closeModal() {
     setIsOpen(false);
   }
-
   function openModal() {
     console.log("openModal");
     setIsOpen(true);
@@ -28,9 +39,9 @@ export default function Modal({ product }) {
         <button
           type="button"
           onClick={openModal}
-          className="bg-violet-400 text-white inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none w-full uppercase mt-3"
+          className="bg-cyan-500 text-white inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none w-full uppercase mt-3"
         >
-          Quick View {product.title}
+          Quick View
         </button>
       </div>
 
@@ -69,40 +80,44 @@ export default function Modal({ product }) {
                   <div className="mt-2">
                     <ProductGallery media={product.media.nodes} />
                     <form className="mt-7">
-                      {options.map(({ name, values }) => {
-                        return values.length == 1 ? null : (
-                          <ProductGridOptions
-                            name={name}
-                            values={values}
-                            openModal={openModal}
-                          />
-                        );
-                      })}
-                      <p className="text-sm text-gray-500">
-                        <span className="max-w-prose whitespace-pre-wrap inherit text-copy flex gap-4">
-                          <ProductPrice
-                            className="text-gray-900 text-lg font-semibold"
-                            variantId={selectedVariant.id}
-                            data={product}
-                          />
-                        </span>
-                      </p>
+                      <div className="flex items-center my-2">
+                        {options.map(({ name, values }) => {
+                          return values.length == 1 ? null : (
+                            <ProductGridOptions
+                              name={name}
+                              values={values}
+                              openModal={openModal}
+                            />
+                          );
+                        })}
+                        <p className="text-sm text-gray-500">
+                          <span className="max-w-prose whitespace-pre-wrap inherit text-copy flex gap-4">
+                            <ProductPrice
+                              className="text-gray-900 text-lg font-semibold"
+                              variantId={selectedVariant.id}
+                              data={product}
+                            />
+                          </span>
+                        </p>
+                      </div>
                       <AddToCartButton
                         variantId={selectedVariant.id}
                         quantity={1}
-                        accessibleAddingToCartLabel="...."
+                        accessibleAddingToCartLabel="adding to cart"
                         className={`bg-rose-600 text-white inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none w-full uppercase ${
                           isOutOfStock && "opacity-50"
                         }`}
                         onClick={
                           !isOutOfStock &&
                           (() => {
-                            setTimeout(() => closeModal(), 1000);
+                            setAddingItem(true);
+                            buttonRef.current.innerHTML = "Adding...";
                           })
                         }
                         disabled={isOutOfStock}
+                        buttonRef={buttonRef}
                       >
-                        add to cart
+                        {isOutOfStock ? "sold out" : "add to cart"}
                       </AddToCartButton>
                     </form>
                   </div>
@@ -153,7 +168,7 @@ function ProductGallery({ media }) {
 
   return (
     <div
-      className={`grid grid-flow-col md:grid-flow-row  md:p-0 md:grid-cols-1 w-screen md:w-full lg:col-span-2`}
+      className={`grid grid-flow-col md:p-0 w-screen md:w-full grid-cols-3 gap-2`}
     >
       <Slider {...settings}>
         {media.map((med, i) => {
@@ -168,32 +183,32 @@ function ProductGallery({ media }) {
             };
           }
 
-          const data = {
-            ...med,
-            image: {
-              ...med.image,
-              altText: med.alt || "Product image",
-            },
-          };
+        const data = {
+          ...med,
+          image: {
+            ...med.image,
+            altText: med.alt || "Product image",
+          },
+        };
 
-          return (
-            <div
-              className={`product-slider snap-center card-image bg-white aspect-square md:w-full w-[80vw] shadow-sm rounded`}
-              key={med.id || med.image.id}
-            >
-              <MediaFile
-                tabIndex="0"
-                className={`w-full h-full aspect-square object-cover`}
-                data={data}
-                options={{
-                  crop: "center",
-                }}
-                {...extraProps}
-              />
-            </div>
-          );
-        })}
-      </Slider>
+        return (
+          <div
+            className={`product-slider snap-center card-image bg-white aspect-square md:w-full w-[80vw] shadow-sm rounded`}
+            key={med.id || med.image.id}
+          >
+            <MediaFile
+              tabIndex="0"
+              className={`w-full h-full aspect-square object-cover`}
+              data={data}
+              options={{
+                crop: "center",
+              }}
+              {...extraProps}
+            />
+          </div>
+        );
+      })}
+     </Slider>
     </div>
   );
 }
@@ -205,13 +220,14 @@ function ProductGridOptions({ name, values, openModal }) {
       name={name}
       onChange={(e) => setSelectedOption(name, e.target.value)}
       style={{ height: "35px" }}
-      className="inline-block mx-3 my-2 bg-transparent"
+      defaultValue={selectedOptions[name]}
+      className="inline-block mx-3 bg-transparent text-sm"
     >
       {values.map(function (value) {
         const selected = selectedOptions[name] === value;
         const id = `option-${name}-${value}`;
         return (
-          <option value={value} defaultValue={selectedOptions[name]} id={id}>
+          <option value={value} id={id}>
             {value}
           </option>
         );

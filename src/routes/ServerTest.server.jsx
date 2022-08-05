@@ -1,29 +1,30 @@
 import {
   gql,
   ShopifyProvider,
-  useShop,
   useShopQuery,
-  fetchSync,
-  useSession,
-  Seo,
   ProductOptionsProvider,
 } from "@shopify/hydrogen";
 import { Suspense } from "react";
 import HomeProductCard from "../components/HomeProductCard.client";
+import LandingFeatureCollection from "../components/LandingFeatureCollection.client]";
 
 export default function ServerTest() {
+  const handle = "earring";
   const {
     data: { products },
   } = useShopQuery({
     query: QUERY,
   });
-  const { countryCode } = useSession();
+  const {
+    data: { collection },
+  } = useShopQuery({
+    query: COLLECTION_QUERY,
+    variables: {
+      handle,
+    },
+  });
   return (
     <>
-      <p>--------------- Below is Server Component ------------------</p>
-      <div>useSession() = {countryCode}</div>
-      <MyComponent />
-      <MyPage />
       <ShopifyProvider>
         <Suspense>
           <section className="w-full gap-4 md:gap-8 grid p-6 md:p-8 lg:p-12">
@@ -35,31 +36,13 @@ export default function ServerTest() {
               ))}
             </div>
           </section>
+          <section className="md:px-8 lg:px-12">
+            <LandingFeatureCollection collection={collection}/>
+          </section>
         </Suspense>
       </ShopifyProvider>
     </>
   );
-}
-// Use `Suspense` boundaries to define where you want your app to display a loading indicator while your data is being accessed.
-export function MyComponent() {
-  return (
-    <Suspense fallback="Loading...">
-      <MyThings />
-    </Suspense>
-  );
-}
-function MyThings() {
-  // To request data from a third-party API, pass the URL to `fetchSync` along with any arguments.
-  const things = fetchSync("https://jsonplaceholder.typicode.com/todos/1", {
-    method: "GET",
-  }).json();
-  return <h2>{things.title}</h2>;
-}
-
-export function MyPage() {
-  const { storeDomain } = useShop();
-
-  return <h1>useShop() = {storeDomain}</h1>;
 }
 
 const QUERY = gql`
@@ -139,6 +122,54 @@ const QUERY = gql`
             compareAtPriceV2 {
               amount
               currencyCode
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+const COLLECTION_QUERY = gql`
+  query CollectionDetails($handle: String!) {
+    collection(handle: $handle) {
+      id
+      title
+      description
+      handle
+      seo {
+        description
+        title
+      }
+      image {
+        id
+        url
+        width
+        height
+        altText
+      }
+      products(first: 8, sortKey: TITLE) {
+        nodes {
+          id
+          title
+          publishedAt
+          handle
+          variants(first: 1) {
+            nodes {
+              id
+              image {
+                url
+                altText
+                width
+                height
+              }
+              priceV2 {
+                amount
+                currencyCode
+              }
+              compareAtPriceV2 {
+                amount
+                currencyCode
+              }
             }
           }
         }

@@ -1,6 +1,7 @@
 import { useUrl, Link, useCart } from "@shopify/hydrogen";
 import { Drawer, useDrawer } from "./Drawer.client";
 import { CartDetails } from "./CartDetails.client";
+import Menu from "./Menu.client";
 
 export default function Header({ shop }) {
   const { pathname } = useUrl();
@@ -20,7 +21,7 @@ export default function Header({ shop }) {
       <header
         role="banner"
         className={`flex items-center h-16 p-6 md:p-8 lg:p-12 sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 antialiased transition shadow-sm ${
-          isHome ? "bg-black/80 text-white" : "bg-white/80"
+          isHome ? "bg-black text-white" : "bg-white"
         }`}
       >
         <div className="flex gap-12">
@@ -28,7 +29,7 @@ export default function Header({ shop }) {
             {shop.name}
           </Link>
         </div>
-
+        <Menu />
         <button
           onClick={openDrawer}
           className="relative flex items-center justify-center w-8 h-8"

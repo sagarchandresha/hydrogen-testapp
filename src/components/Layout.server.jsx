@@ -7,6 +7,7 @@ import {
   Seo,
 } from "@shopify/hydrogen";
 import { Suspense } from "react";
+import NewFooter from "./Footer.client";
 import Header from "./Header.client";
 
 /**
@@ -42,9 +43,12 @@ export function Layout({ children }) {
         </div>
         <Header shop={shop} />
 
-        <main role="main" id="mainContent" className="flex-grow bg-blue-100">
+        <main role="main" id="mainContent" className="flex-grow bg-blue-100 pb-5">
           <Suspense>{children}</Suspense>
         </main>
+        <Suspense>
+          <NewFooter shop={shop} />
+        </Suspense>
       </div>
     </>
   );
