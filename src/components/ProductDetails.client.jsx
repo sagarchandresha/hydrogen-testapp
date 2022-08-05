@@ -8,8 +8,7 @@ import {
 } from "@shopify/hydrogen";
 import { CartDetails } from "./CartDetails.client";
 import { Drawer, useDrawer } from "./Drawer.client";
-import AwesomeSlider from "react-awesome-slider";
-import "react-awesome-slider/dist/styles.css";
+import Slider from '@ant-design/react-slick';
 
 export default function ProductDetails({ product }) {
   return (
@@ -174,6 +173,14 @@ function OptionRadio({ values, name }) {
 }
 
 function ProductGallery({ media }) {
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false
+  };
   if (!media.length) {
     return null;
   }
@@ -182,7 +189,7 @@ function ProductGallery({ media }) {
     <div
       className={`grid gap-4 grid-flow-col md:grid-flow-row  md:p-0 md:grid-cols-1 w-screen md:w-full lg:col-span-1`}
     >
-      <AwesomeSlider>
+      <Slider {...settings}>
         {media.map((med, i) => {
           let extraProps = {};
 
@@ -220,7 +227,7 @@ function ProductGallery({ media }) {
             </div>
           );
         })}
-      </AwesomeSlider>
+      </Slider>
     </div>
   );
 }
