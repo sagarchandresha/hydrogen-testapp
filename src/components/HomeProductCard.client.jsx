@@ -12,7 +12,6 @@ import { useEffect, useRef, useState } from "react";
 import { Drawer, useDrawer } from "./Drawer.client";
 import { CartDetails } from "./CartDetails.client";
 import Modal from "./Modal.client";
-// import 'react-awesome-slider/dist/styles.css';
 
 export default function HomeProductCard({ product }) {
   const { pathname } = useUrl();

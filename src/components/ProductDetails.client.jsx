@@ -11,13 +11,13 @@ import { useEffect, useRef, useState } from "react";
 import Accordion from "./Accordion.client";
 import { CartDetails } from "./CartDetails.client";
 import { Drawer, useDrawer } from "./Drawer.client";
+
+import Slider from '@ant-design/react-slick';
 import RecenlyViewed from "./RecentlyViewed.client";
 import styles from "../styles/ProductDetails.module.css";
 import ToggleSwitch from "./ToggleSwitch.client";
 import SizeGuide from "./Product/SizeGuide.client";
 import Faq from "./Product/Faq.client";
-// import AwesomeSlider from "react-awesome-slider";
-// import "react-awesome-slider/dist/styles.css";
 
 export default function ProductDetails({ product }) {
   const [viewed, setViewed] = useState({});
@@ -313,15 +313,25 @@ function OptionRadio({ values, name }) {
 }
 
 function ProductGallery({ media }) {
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false
+  };
   if (!media.length) {
     return null;
   }
 
   return (
+
     <div className={`grid gap-2 grid-cols-2 md:p-0 w-screen md:w-full`}>
-      {/* <AwesomeSlider> */}
+      <Slider {...settings}>
       {media.map((med, i) => {
         let extraProps = {};
+
 
         if (med.mediaContentType === "MODEL_3D") {
           extraProps = {
@@ -357,7 +367,7 @@ function ProductGallery({ media }) {
           </div>
         );
       })}
-      {/* </AwesomeSlider> */}
+      </Slider>
     </div>
   );
 }
